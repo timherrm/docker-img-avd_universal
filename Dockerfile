@@ -31,7 +31,4 @@ RUN node --version && \
     git --version && \
     ansible --version
 
-# Set working directory
-WORKDIR /etc/ansible
-
 CMD ["bash"]
