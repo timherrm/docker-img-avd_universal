@@ -23,11 +23,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Extract base image tag
-        id: base-tag
+      - name: Extract AVD version from galaxy-requirements.yml
+        id: avd-version
         run: |
-          BASE_TAG=$(grep "^FROM" Dockerfile | sed 's/FROM.*://' | tr -d '\r')
-          echo "base_tag=${BASE_TAG}" >> $GITHUB_OUTPUT
+          # get the version value from galaxy-requirements.yml (first occurrence)
+          AVD_VERSION=$(grep -m1 "version:" galaxy-requirements.yml | sed 's/.*version:[[:space:]]*//' | tr -d '\r')
+          echo "avd_version=${AVD_VERSION}" >> $GITHUB_OUTPUT
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -53,15 +54,15 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=${{ steps.base-tag.outputs.base_tag }}
-            type=raw,value=${{ steps.base-tag.outputs.base_tag }}-${{ steps.date.outputs.date }}
+            type=raw,value=${{ steps.avd-version.outputs.avd_version }}
+            type=raw,value=${{ steps.avd-version.outputs.avd_version }}-${{ steps.date.outputs.date }}
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build description string
         id: desc
         run: |
           # Build a reusable description matching the Dockerfile LABEL
-          DESC="A docker image based on the AVD universal image, but including Node.js (Base: ${{ steps.base-tag.outputs.base_tag }})"
+          DESC="A docker image based on the AVD universal image, AVD collection version ${{ steps.avd-version.outputs.avd_version }}, including Node.js"
           echo "description=$DESC" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker image

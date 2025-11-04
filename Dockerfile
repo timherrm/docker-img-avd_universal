@@ -1,19 +1,37 @@
-FROM ghcr.io/aristanetworks/avd/universal:python3.11-avd-v5.2.3
+FROM node:25.0.0-slim
 
 # Image description
 ARG IMAGE_DESCRIPTION="A docker image based on the AVD universal image, but including Node.js"
 
-RUN curl -fsSL https://deb.nodesource.com/setup_25.x | sudo -E bash -
-
-USER root
-
+# Install system dependencies and Python
 RUN apt-get update && apt-get install -y \
-    nodejs \
+    python3 \
+    python3-pip \
+    git \
     && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements files
+COPY pip-requirements.txt .
+
+# Install Python packages
+RUN pip3 install -r pip-requirements.txt --break-system-packages
+
+# Copy requirements files
+COPY galaxy-requirements.yml .
+
+# Install Ansible collections
+RUN ansible-galaxy collection install -r galaxy-requirements.yml
 
 # OCI label: description (recommended for registry UI and multi-arch manifests)
 LABEL org.opencontainers.image.description="${IMAGE_DESCRIPTION}"
 
-USER avd
+# Verify installations
+RUN node --version && \
+    python3 --version && \
+    git --version && \
+    ansible --version
+
+# Set working directory
+WORKDIR /etc/ansible
 
 CMD ["bash"]
