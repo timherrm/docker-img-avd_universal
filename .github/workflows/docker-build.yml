@@ -54,8 +54,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=${{ steps.avd-version.outputs.avd_version }}
-            type=raw,value=${{ steps.avd-version.outputs.avd_version }}-${{ steps.date.outputs.date }}
+            type=raw,value=avd-${{ steps.avd-version.outputs.avd_version }}
+            type=raw,value=avd-${{ steps.avd-version.outputs.avd_version }}-${{ steps.date.outputs.date }}
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build description string
