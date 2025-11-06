@@ -5,5 +5,11 @@
   ],
   "managerFilePatterns": [
     "/(^|/)(galaxy|requirements)(\\.ansible)?\\.ya?ml$/"
+  ],
+  "packageRules": [
+    {
+      "matchFileNames": ["galaxy.yml"],
+      "matchManagers": ["ansible-galaxy"]
+    }
   ]
 }
