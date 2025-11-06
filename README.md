@@ -16,6 +16,7 @@ Images are published to GitHub Container Registry under the repository path:
 ```bash
 ghcr.io/timherrm/docker-img-avd
 ```
+
 Packages can be found [here](https://github.com/timherrm/docker-img-avd/pkgs/container/docker-img-avd)
 
 ## Tags produced by the workflow
