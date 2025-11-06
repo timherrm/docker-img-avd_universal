@@ -1,3 +1,4 @@
 ---
 collections:
-  - arista.avd: "5.7.2"
+  - name: arista.avd
+    version: 5.7.2
