@@ -8,7 +8,6 @@ RUN groupadd -g 1001 ciuser && useradd -m -u 1001 -g 1001 ciuser
 
 # Copy requirements files
 COPY pip-requirements.txt .
-COPY galaxy-requirements.yml .
 
 # Install Python packages
 RUN pip3 install -r pip-requirements.txt --break-system-packages
@@ -19,6 +18,9 @@ RUN mkdir -p /workspaces/arista-fabric && chown -R ciuser:ciuser /workspaces
 
 # Switch to non-root user
 USER ciuser
+
+# Copy requirements files
+COPY galaxy-requirements.yml .
 
 # Install Ansible collections
 RUN ansible-galaxy collection install -r galaxy-requirements.yml
