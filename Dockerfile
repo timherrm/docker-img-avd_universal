@@ -32,4 +32,11 @@ COPY requirements.yml .
 # Install Ansible collections
 RUN ansible-galaxy collection install -r requirements.yml
 
+# Verify installations
+RUN node --version && \
+    python3 --version && \
+    git --version && \
+    ansible --version && \
+    ansible-galaxy collection list
+
 CMD ["bash"]
