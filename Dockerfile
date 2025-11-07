@@ -17,7 +17,7 @@ WORKDIR /workspaces/arista-fabric
 RUN mkdir -p /workspaces/arista-fabric && chown -R ciuser:ciuser /workspaces
 
 # Enable passwordless root access
-RUN passwd -d root
+# RUN passwd -d root
 
 # Switch to non-root user
 USER ciuser
